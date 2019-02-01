@@ -1,0 +1,23 @@
+{
+  "bugs": {
+    "url": "https://github.com/atom/markdown-preview/issues"
+  },
+  "configSchema": {},
+  "dependencies": {},
+  "description": "Open a rendered version of the Markdown in the current editor with `ctrl-shift-m`.",
+  "deserializers": {
+  },
+  "devDependencies": {},
+  "engines": {
+    "atom": "*"
+  },
+  "homepage": "https://github.com/atom/markdown-preview#readme",
+  "license": "MIT",
+  "main": "./lib/main",
+  "name": "markdown-preview",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/atom/markdown-preview.git"
+  },
+  "version": "0.159.25"
+}

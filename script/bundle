@@ -1,0 +1,11 @@
+#!/usr/bin/env node
+
+const runWebpack = require('./lib/bundle-main')
+const minify = require('./lib/minify-main')
+minify()
+return
+
+console.log('running webpack...')
+runWebpack().then(stats => {
+  console.log(stats)
+}, err => console.error(err))

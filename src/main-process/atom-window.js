@@ -32,7 +32,7 @@ class AtomWindow extends EventEmitter {
 
     const options = {
       show: false,
-      title: 'Atom',
+      title: 'Inkdrop',
       tabbingIdentifier: 'atom',
       webPreferences: {
         // Prevent specs from throttling when the window is in the background:

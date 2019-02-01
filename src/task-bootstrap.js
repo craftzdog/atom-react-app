@@ -48,7 +48,7 @@ const handleEvents = function () {
       isAsync = true
       return result => global.emit('task:completed', result)
     }
-    const result = handler.bind({async})(...args)
+    const result = handler.bind({async: async})(...args)
     if (!isAsync) { return global.emit('task:completed', result) }
   })
 }

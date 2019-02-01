@@ -1,7 +1,11 @@
 {
-  "breakConfig": true,
   "sourceMap": "inline",
-  "blacklist": ["es6.forOf", "useStrict"],
-  "optional": ["asyncToGenerator"],
-  "stage": 0
+  "presets": [
+    ["env", {
+      "targets": { "electron": "2.0.12" },
+      "useBuiltIns": "usage",
+      "debug": false
+    }],
+    "react"
+  ]
 }

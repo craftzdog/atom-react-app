@@ -4,7 +4,7 @@
 
 // Run bootstrap first to ensure all the dependencies used later in this script
 // are installed.
-require('./bootstrap')
+//# require('./bootstrap')
 
 // Needed so we can require src/module-cache.coffee during generateModuleCache
 require('coffee-script/register')
@@ -50,6 +50,9 @@ const transpileCoffeeScriptPaths = require('./lib/transpile-coffee-script-paths'
 const transpileCsonPaths = require('./lib/transpile-cson-paths')
 const transpilePegJsPaths = require('./lib/transpile-peg-js-paths')
 const transpilePackagesWithCustomTranspilerPaths = require('./lib/transpile-packages-with-custom-transpiler-paths.js')
+const minifyMain = require('./lib/minify-main')
+const bundleRenderer = require('./lib/bundle-renderer')
+const deployStartupSnapshot = require('./lib/deploy-startup-snapshot')
 
 process.on('unhandledRejection', function (e) {
   console.error(e.stack || e)
@@ -71,16 +74,20 @@ if (!argv.existingBinaries) {
   generateModuleCache()
   prebuildLessCache()
   generateMetadata()
-  generateAPIDocs()
+  minifyMain()
+  // generateAPIDocs()
   if (!argv.generateApiDocs) {
-    binariesPromise = dumpSymbols()
+    binariesPromise = binariesPromise
+      .then(dumpSymbols)
   }
 }
 
 if (!argv.generateApiDocs) {
   binariesPromise
+    .then(bundleRenderer)
     .then(packageApplication)
-    .then(packagedAppPath => generateStartupSnapshot(packagedAppPath).then(() => packagedAppPath))
+    .then(packagedAppPath => deployStartupSnapshot(packagedAppPath).then(() => packagedAppPath))
+    // .then(packagedAppPath => generateStartupSnapshot(packagedAppPath).then(() => packagedAppPath))
     .then(packagedAppPath => {
       switch (process.platform) {
         case 'darwin': {

@@ -3,6 +3,7 @@
 
 'use strict'
 
+const execSync = require('child_process').execSync
 const path = require('path')
 const fs = require('fs-extra')
 const CONFIG = require('../config')
@@ -11,16 +12,23 @@ const includePathInPackagedApp = require('./include-path-in-packaged-app')
 
 module.exports = function () {
   console.log(`Copying assets to ${CONFIG.intermediateAppPath}`)
+
+  let depFiles = execSync('npm ls --prod --parseable')
+    .toString()
+    .split('\n')
+    .slice(1)
+    .slice(0, -1)
+
   let srcPaths = [
     path.join(CONFIG.repositoryRootPath, 'benchmarks', 'benchmark-runner.js'),
     path.join(CONFIG.repositoryRootPath, 'dot-atom'),
     path.join(CONFIG.repositoryRootPath, 'exports'),
-    path.join(CONFIG.repositoryRootPath, 'node_modules'),
     path.join(CONFIG.repositoryRootPath, 'package.json'),
     path.join(CONFIG.repositoryRootPath, 'static'),
     path.join(CONFIG.repositoryRootPath, 'src'),
     path.join(CONFIG.repositoryRootPath, 'vendor')
   ]
+  srcPaths = srcPaths.concat(depFiles)
   srcPaths = srcPaths.concat(glob.sync(path.join(CONFIG.repositoryRootPath, 'spec', '*.*'), {ignore: path.join('**', '*-spec.*')}))
   for (let srcPath of srcPaths) {
     fs.copySync(srcPath, computeDestinationPath(srcPath), {filter: includePathInPackagedApp, dereference: true})

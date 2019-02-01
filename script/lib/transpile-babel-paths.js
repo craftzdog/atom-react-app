@@ -16,6 +16,11 @@ module.exports = function () {
 
 function getPathsToTranspile () {
   let paths = []
+
+  paths = paths.concat(glob.sync(
+    path.join(CONFIG.intermediateAppPath, 'src', 'components', '**', '*.js')
+  ))
+
   for (let packageName of Object.keys(CONFIG.appMetadata.packageDependencies)) {
     paths = paths.concat(glob.sync(
       path.join(CONFIG.intermediateAppPath, 'node_modules', packageName, '**', '*.js'),

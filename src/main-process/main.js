@@ -57,6 +57,5 @@ if (args.resourcePath) {
     resourcePath = stableResourcePath
   }
 }
-
 const start = require(path.join(resourcePath, 'src', 'main-process', 'start'))
 start(resourcePath, devResourcePath, startTime)

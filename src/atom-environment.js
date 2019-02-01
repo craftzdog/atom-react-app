@@ -43,6 +43,7 @@ const TextEditor = require('./text-editor')
 const TextBuffer = require('text-buffer')
 const TextEditorRegistry = require('./text-editor-registry')
 const AutoUpdateManager = require('./auto-update-manager')
+const React = require('react')
 
 let nextId = 0
 
@@ -824,7 +825,7 @@ class AtomEnvironment {
         this.document.body.classList.add('hidden-title-bar')
       }
 
-      this.document.body.appendChild(this.workspace.getElement())
+      // this.document.body.appendChild(this.workspace.getElement())
       if (this.backgroundStylesheet) this.backgroundStylesheet.remove()
 
       let previousProjectPaths = this.project.getPaths()
@@ -851,6 +852,16 @@ class AtomEnvironment {
       this.menu.update()
 
       await this.openInitialEmptyEditorIfNecessary()
+
+      const { render, unmountComponentAtNode } = require('react-dom')
+      const AppContainer = require('./components/app-container').default
+      const root = document.createElement('div')
+      root.classList.add('app-container')
+      document.body.append(root)
+      const element = React.createElement(AppContainer)
+
+      render(element, root)
+      this.element = element
     })
 
     const loadHistoryPromise = this.history.loadState().then(() => {

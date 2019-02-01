@@ -1,0 +1,47 @@
+root: true
+extends:
+- plugin:react/recommended
+- plugin:flowtype/recommended
+- plugin:prettier/recommended
+plugins:
+- flowtype
+- react
+- prettier
+parser: babel-eslint
+env:
+  browser: true
+  node: true
+  es6: true
+globals:
+  Stripe: true
+  Rollbar: true
+  BROWSER: true
+  fetch: true
+  URL: true
+  File: true
+  FileReader: true
+  Image: true
+  btoa: true
+  alert: true
+  history: true
+rules:
+  react/no-danger: 0
+  react/prefer-stateless-function:
+  - 2
+  - ignorePureComponents: true
+  no-useless-escape: 0
+  prettier/prettier:
+    - 2
+    -
+      trailingComma: none
+      singleQuote: true
+      semi: false
+  prefer-const: 2
+  no-unused-vars:
+    - 2
+    -
+      argsIgnorePattern: ^_
+      varsIgnorePattern: ^_
+  flowtype/generic-spacing:
+    - 0
+    - never

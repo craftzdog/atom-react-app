@@ -5,15 +5,16 @@ const electronLink = require('electron-link')
 const terser = require('terser')
 const CONFIG = require('../config')
 
-module.exports = function (packagedAppPath) {
+module.exports = function () {
   const snapshotScriptPath = path.join(CONFIG.buildOutputPath, 'startup.js')
   const coreModules = new Set(['electron', 'atom', 'shell', 'WNdb', 'lapack', 'remote'])
   const baseDirPath = path.join(CONFIG.intermediateAppPath, 'static')
+  const mainPath = path.resolve(baseDirPath, '..', 'src', 'initialize-application-window.js')
   let processedFiles = 0
 
   return electronLink({
     baseDirPath,
-    mainPath: path.resolve(baseDirPath, '..', 'src', 'initialize-application-window.js'),
+    mainPath: mainPath,
     cachePath: path.join(CONFIG.atomHomeDirPath, 'snapshot-cache'),
     auxiliaryData: CONFIG.snapshotAuxiliaryData,
     shouldExcludeModule: ({requiringModulePath, requiredModulePath}) => {
@@ -73,6 +74,7 @@ module.exports = function (packagedAppPath) {
   }).then(({snapshotScript}) => {
     process.stdout.write('\n')
 
+    fs.writeFileSync(snapshotScriptPath + '-src.js', snapshotScript)
     process.stdout.write('Minifying startup script')
     const minification = terser.minify(snapshotScript, {
       keep_fnames: true,
@@ -85,40 +87,7 @@ module.exports = function (packagedAppPath) {
     }
     process.stdout.write('\n')
     fs.writeFileSync(snapshotScriptPath, minification.code)
-
-    console.log('Verifying if snapshot can be executed via `mksnapshot`')
-    const verifySnapshotScriptPath = path.join(CONFIG.repositoryRootPath, 'script', 'verify-snapshot-script')
-    let nodeBundledInElectronPath
-    if (process.platform === 'darwin') {
-      const executableName = CONFIG.appName
-      nodeBundledInElectronPath = path.join(packagedAppPath, 'Contents', 'MacOS', executableName)
-    } else if (process.platform === 'win32') {
-      nodeBundledInElectronPath = path.join(packagedAppPath, 'atom.exe')
-    } else {
-      nodeBundledInElectronPath = path.join(packagedAppPath, 'atom')
-    }
-    childProcess.execFileSync(
-      nodeBundledInElectronPath,
-      [verifySnapshotScriptPath, snapshotScriptPath],
-      {env: Object.assign({}, process.env, {ELECTRON_RUN_AS_NODE: 1})}
-    )
-
-    const generatedStartupBlobPath = path.join(CONFIG.buildOutputPath, 'snapshot_blob.bin')
-    console.log(`Generating startup blob at "${generatedStartupBlobPath}"`)
-    childProcess.execFileSync(
-      path.join(CONFIG.repositoryRootPath, 'script', 'node_modules', 'electron-mksnapshot', 'bin', 'mksnapshot'),
-      ['--no-use_ic', snapshotScriptPath, '--startup_blob', generatedStartupBlobPath]
-    )
-
-    let startupBlobDestinationPath
-    if (process.platform === 'darwin') {
-      startupBlobDestinationPath = `${packagedAppPath}/Contents/Frameworks/Electron Framework.framework/Resources/snapshot_blob.bin`
-    } else {
-      startupBlobDestinationPath = path.join(packagedAppPath, 'snapshot_blob.bin')
-    }
-
-    console.log(`Moving generated startup blob into "${startupBlobDestinationPath}"`)
-    fs.unlinkSync(startupBlobDestinationPath)
-    fs.renameSync(generatedStartupBlobPath, startupBlobDestinationPath)
+    fs.renameSync(mainPath, mainPath + '.bak')
+    fs.writeFileSync(mainPath, '')
   })
 }
