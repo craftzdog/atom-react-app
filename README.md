@@ -4,6 +4,18 @@
 [![Dependency Status](https://david-dm.org/atom/atom.svg)](https://david-dm.org/atom/atom)
 [![Join the Atom Community on Slack](https://atom-slack.herokuapp.com/badge.svg)](https://atom-slack.herokuapp.com)
 
+This is an empty React app project based on Atom Editor base system.
+You can build your own desktop app built with React, which comes with package extensions and UI theme support!
+
+**Disclaimer**: This is not a complete work as a boilerplate. You have to understand what you do when you fork this project.
+
+You can check [the commit](https://github.com/craftzdog/atom-react-app/commit/98ba122cc3eff2aaea7180cad970148bd85cc0da) to know what has changed from the original code.
+`src/components/app-container.js` is the app container component where is a good place to start digging into it.
+
+![Screenshot](docs/react-app.png)
+
+* * *
+
 Atom is a hackable text editor for the 21st century, built on [Electron](https://github.com/atom/electron), and based on everything we love about our favorite editors. We designed it to be deeply customizable, but still approachable using the default configuration.
 
 Visit [atom.io](https://atom.io) to learn more or visit the [Atom forum](https://discuss.atom.io).
