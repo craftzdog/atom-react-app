@@ -7,12 +7,28 @@
 This is an empty React app project based on Atom Editor base system.
 You can build your own desktop app built with React, which comes with package extensions and UI theme support!
 
+* Check out my blogpost: [Understanding Atom Editor and Hacking It to Build a React App](https://blog.inkdrop.info/understanding-atom-editor-and-hacking-it-to-build-a-react-app-4692f049795)
+
+
 **Disclaimer**: This is not a complete work as a boilerplate. You have to understand what you do when you fork this project.
 
 You can check [the commit](https://github.com/craftzdog/atom-react-app/commit/98ba122cc3eff2aaea7180cad970148bd85cc0da) to know what has changed from the original code.
 `src/components/app-container.js` is the app container component where is a good place to start digging into it.
 
 ![Screenshot](docs/react-app.png)
+
+* Blogpost: [Understanding Atom Editor and Hacking It to Build a React App](https://blog.inkdrop.info/understanding-atom-editor-and-hacking-it-to-build-a-react-app-4692f049795)
+
+### How to run it
+
+Same as the original:
+
+```bash
+$ git clone git@github.com:craftzdog/atom-react-app
+$ cd atom-react-app
+$ script/bootstrap
+$ atom --dev --foreground
+```
 
 * * *
 
